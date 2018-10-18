@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Text Prizm</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body class="h-100">
+    <nav class="navbar fixed-top navbar-light bg-light">
+      <div class="navbar-item" href="#"><img src="/logo.png" height="25" alt=""> Text Prizm</div>
+      <form class="form-inline float-right">
+        <div class="input-group input-group-sm">
+          <input type="text" class="form-control form-control-sm" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="input-group-text form-control-sm" type="submit" id="basic-addon2"><i class="fe fe-search"></i></button>
+          </div>
+        </div>
+      </form>
+      <!--<i class="fe fe-elipsis-v"></i>-->
+    </nav>
+    <div class="container-fluid d-flex h-100 flex-column">
+      <%= yield %>
+    </div>
+  </body>
+</html>
