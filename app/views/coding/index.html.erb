@@ -1,18 +1,54 @@
 <div class="row flex-fill d-flex h-100">
 	<div class="flex-fill d-flex col-md-9" >
 		<div class="row flex-fill">
-			<div class="col-md-1" style="background-color:#fff2da"> 
+			<div class="col-md-1" style="background-color:#EBFEFF"> 
 				<br><br><br><br><br><br><br><br>
 				<p style="text-orientation:upright;writing-mode: vertical-lr;text-align: center;vertical-align: middle;"> 
 				                        	T  i  m  e  l  i  n  e
 				</p>
 			</div>
-			<div class="col-md-11" style="overflow-y:scroll;background-color: #daffdf">
-				<br>Here will be the short texts to be coded with a timeline on the left
+			<div class="col-md-11" style="overflow-y:auto;padding-left: 0;padding-right: 0">
+				<!-- <br>Here will be the short texts to be coded with a timeline on the left<br> -->
+				
+				<% if !@texts.empty? %>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th scope="col"><small><strong>Username</strong></small></th>
+								<th scope="col"><small><strong>Text</strong></small></th>
+								<th scope="col" width="15%"><small><strong>Date</strong></small></th>
+							</tr>
+						</thead>
+						<tbody>
+							<% @texts.each do |t| %>
+								<tr>
+									<td><small><%= t.username %></small></td>
+									<td><small><%= t.text %></small></td>
+									<td><small><%= t.date.to_formatted_s(:long_ordinal) %></small></td>
+								</tr>
+								<!--<small><%= t.username + ": " + t.text %></small><br>-->
+							<% end %>
+						</tbody>
+					</table>
+				<% else %>
+					Here will be the short texts to be coded when they are uploaded to the database
+				<% end %>
 			</div>
 		</div>
 	</div>
-	<div class="flex-fill d-flex col-md-3" style=" overflow-y:scroll; background-color: #DAf3FF">
-		<br>Here will be the labels to code the data
+	<div class="col-md-3" style=" overflow-y:auto;padding-top: 10px">
+		<!-- <br>Here will be the labels to code the data <br> -->
+
+		<!-- <div class="row">	 -->
+			<% if !@texts.empty? %>
+				<% @codes.each do |c| %>
+					<!-- <div class="col-lg-4"> -->
+						<button type="button" class="btn btn-default btn-block" style="background-color:<%=c.color%>"><%= c.name%></button>
+					<!-- </div> -->
+				<% end %>
+			<% else %>
+				Here will be the codes when they are uploaded to the database
+			<% end %>
+		<!-- </div> -->
 	</div>
 </div>
