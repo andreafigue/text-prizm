@@ -11,7 +11,7 @@
 				<!-- <br>Here will be the short texts to be coded with a timeline on the left<br> -->
 				
 				<% if !@texts.empty? %>
-					<table class="table table-bordered">
+					<table class="table table-bordered table-hover" id="tableMessages">
 						<thead>
 							<tr>
 								<th scope="col"><small><strong>Username</strong></small></th>
@@ -21,7 +21,7 @@
 						</thead>
 						<tbody>
 							<% @texts.each do |t| %>
-								<tr>
+								<tr class="clickable-row">
 									<td><small><%= t.username %></small></td>
 									<td><small><%= t.text %></small></td>
 									<td><small><%= t.date.to_formatted_s(:long_ordinal) %></small></td>
@@ -52,3 +52,65 @@
 		<!-- </div> -->
 	</div>
 </div>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		$('#tableMessages').on('click', '.clickable-row', function(event) {
+			if ($(this).hasClass('table-primary')) {
+				$(this).removeClass('table-primary').siblings().removeClass('table-primary');
+				$(this).attr("id", null);
+				$(this).siblings().attr("id", null)
+			}else{
+				$(this).addClass('table-primary').siblings().removeClass('table-primary');
+				$(this).siblings().attr("id", null)
+				$(this).attr("id", "row_active");
+			}
+		});
+
+		$('html').keydown(function(e){
+			switch(e.keyCode){
+				case 40:
+					//console.log("down");
+					a = $("#row_active")
+
+					if (a[0] != $("#tableMessages tr:last")[0]) {
+
+						a.removeClass('table-primary');
+						a.attr("id", null);
+
+						b = a.closest("tr").next("tr")
+						b.addClass('table-primary');
+						b.attr("id", "row_active");
+						b[0].scrollIntoView(false);
+					}
+					//
+
+					break;
+				case 38:
+					//console.log("up");
+					a = $("#row_active")
+
+					if (a[0] != $("#tableMessages tr")[1]) {
+						a.removeClass('table-primary');
+						a.attr("id", null);
+
+						b = a.closest("tr").prev("tr")
+						b.addClass('table-primary');
+						b.attr("id", "row_active");
+						b[0].scrollIntoView(false);
+					}
+					//b.scrollIntoView(false);
+					break;
+				//case 39:
+				//	console.log("right");
+				//	break;
+				//case 37:
+				//	console.log("left");
+				//	break;
+			}
+
+		});
+
+	});
+</script>
