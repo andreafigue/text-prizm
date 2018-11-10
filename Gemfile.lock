@@ -144,6 +144,8 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
+    rails-jquery-autocomplete (1.0.5)
+      rails (>= 3.2)
     railties (5.2.1)
       actionpack (= 5.2.1)
       activesupport (= 5.2.1)
@@ -221,6 +223,7 @@ DEPENDENCIES
   mini_racer
   puma (~> 3.11)
   rails (~> 5.2.1)
+  rails-jquery-autocomplete
   sass-rails (~> 5.0)
   selenium-webdriver
   spring

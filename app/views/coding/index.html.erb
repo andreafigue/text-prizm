@@ -53,9 +53,32 @@
 	</div>
 </div>
 
+<!-- Coding Modal -->
+<div class="modal fade " id="codingModal" tabindex="-1" role="dialog" aria-labelledby="codingModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div id="affects">
+          <input class="form-control form-control-lg typeahead" id="inputCodingLabel" type="text" placeholder="Start typing code...">
+        </div>
+        <small class="text-muted float-right">Press esc to close, enter to apply code</small>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Coding Modal -->
+
+
+
+
 <script type="text/javascript">
 
 	$(document).ready(function () {
+
+		$('#myModal').on('shown.bs.modal', function () {
+  			$('#myInput').trigger('focus')
+		});
+
 		$('#tableMessages').on('click', '.clickable-row', function(event) {
 			if ($(this).hasClass('table-primary')) {
 				$(this).removeClass('table-primary').siblings().removeClass('table-primary');
@@ -69,48 +92,119 @@
 		});
 
 		$('html').keydown(function(e){
-			switch(e.keyCode){
-				case 40:
-					//console.log("down");
-					a = $("#row_active")
+			if ($("#codingModal").hasClass("show") == false){
+				switch(e.keyCode){
+					case 40:
+						//console.log("down");
+						a = $("#row_active")
 
-					if (a[0] != $("#tableMessages tr:last")[0]) {
+						if (a[0] != $("#tableMessages tr:last")[0]) {
 
-						a.removeClass('table-primary');
-						a.attr("id", null);
+							a.removeClass('table-primary');
+							a.attr("id", null);
 
-						b = a.closest("tr").next("tr")
-						b.addClass('table-primary');
-						b.attr("id", "row_active");
-						b[0].scrollIntoView(false);
-					}
-					//
+							b = a.closest("tr").next("tr")
+							b.addClass('table-primary');
+							b.attr("id", "row_active");
+							b[0].scrollIntoView(false);
+						}
+						//
 
-					break;
-				case 38:
-					//console.log("up");
-					a = $("#row_active")
+						break;
+					case 38:
+						//console.log("up");
+						a = $("#row_active")
 
-					if (a[0] != $("#tableMessages tr")[1]) {
-						a.removeClass('table-primary');
-						a.attr("id", null);
+						if (a[0] != $("#tableMessages tr")[1]) {
+							a.removeClass('table-primary');
+							a.attr("id", null);
 
-						b = a.closest("tr").prev("tr")
-						b.addClass('table-primary');
-						b.attr("id", "row_active");
-						b[0].scrollIntoView(false);
-					}
-					//b.scrollIntoView(false);
-					break;
-				//case 39:
-				//	console.log("right");
-				//	break;
-				//case 37:
-				//	console.log("left");
-				//	break;
+							b = a.closest("tr").prev("tr")
+							b.addClass('table-primary');
+							b.attr("id", "row_active");
+							b[0].scrollIntoView(false);
+						}
+						//b.scrollIntoView(false);
+						break;
+					//case 39:
+					//	console.log("right");
+					//	break;
+					//case 37:
+					//	console.log("left");
+					//	break;
+				}
 			}
 
 		});
 
+		// Coding Modal
+	    $('html').keypress(function(e){
+	    	$('#codingModal').modal('show')
+	    });
+
+	    $('#codingModal').on('shown.bs.modal', function () {
+	    	$('#inputCodingLabel').trigger('focus')
+	    });
+
+		emotions = [{"id": 17, "name": "anger", "color": "#FC5C56"},
+		 {"id": 18, "name": "anticipation", "color": "#FFB05C"},
+		 {"id": 19, "name": "joy", "color": "#FFE663"},
+		 {"id": 20, "name": "trust", "color": "#B5FC68"},
+		 {"id": 21, "name": "fear", "color": "#41DB8A"},
+		 {"id": 22, "name": "surprise", "color": "#3CE8FF"},
+		 {"id": 23, "name": "sadness", "color": "#519DFC"},
+		 {"id": 24, "name": "disgust", "color": "#B563FB"},
+		 {"id": 25, "name": "accusation", "color": "#FC5C56"},
+		 {"id": 25, "name": "support", "color": "#41DB8A"},
+		 {"id": 25, "name": "unknown", "color": "#6B757C"},
+		 {"id": 25, "name": "irrelevant", "color": "#6B757C"}];
+
+
+	    var affects = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			local: emotions
+	    });
+
+	    affects.initialize();
+
+	    $('#affects .typeahead').typeahead({
+			hint: true,
+			highlight: true,
+			minLength: 1
+	    },
+	    {
+			name: 'affects',
+			display: 'name',
+			valueKey: "id",
+			source: affects,
+			templates:{
+				suggestion: Handlebars.compile('<div></div>')
+			}
+	    });
+
+
+	    $('#affects .typeahead').on('keydown', function(event) {	
+	        if(event.which == 13) {
+
+	          	typeahead = $(this).data().ttTypeahead;
+	          	hint = typeahead.input.$hint.val();
+	          	val = typeahead.input.query;
+
+	          	if (emotions.some(m => m.name === hint) | emotions.some(m => m.name === val)){
+		          	if(hint != ""){
+		          		selected = emotions.filter(obj => {return obj.name === hint})
+		          	}else{
+		          		selected = emotions.filter(obj => {return obj.name === val})
+		          	}
+
+		          	selected = selected[0]
+		          	
+		          	$("#row_active td:nth-child(2)").append("<span class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")
+		          	$('.typeahead').typeahead('val', '');
+		            $("#codingModal").modal("hide");
+		        }
+	        }
+	    });
 	});
 </script>

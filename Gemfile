@@ -32,6 +32,9 @@ gem 'jquery-rails'
 gem 'feathericon-rails'
 
 
+#gem 'bootstrap-typeahead-rails'
+
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
