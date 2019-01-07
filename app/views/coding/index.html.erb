@@ -7,7 +7,7 @@
 				                        	T  i  m  e  l  i  n  e
 				</p>
 			</div>-->
-			<div class="col-md-12" style="overflow-y:auto;padding-left: 0;padding-right: 0" id="texts">
+			<div class="col-md-12" style="overflow-y:auto;padding-left: 0;padding-right: 0;" id="texts">
 				<!-- <br>Here will be the short texts to be coded with a timeline on the left<br> -->
 				
 				<% if !@texts.empty? %>
@@ -15,7 +15,7 @@
 						<thead>
 							<tr>
 								<th scope="col"><small><strong>Username</strong></small></th>
-								<th scope="col"><small><strong>Text</strong></small></th>
+								<th scope="col"><small><strong>Text</strong></small></th> 
 								<th scope="col" width="15%"><small><strong>Date</strong></small></th>
 							</tr>
 						</thead>
@@ -36,16 +36,20 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3" style="">
+	<div class="col-md-3" >
 		<!-- <br>Here will be the labels to code the data <br> -->
 
-		<div class="row" style="min-height:40%;max-height: 40%;overflow-y: auto;padding-top: 0.5em; padding-bottom:0.5em; margin: 0">
+		<div class="row" style="min-height:40%;max-height: 40%;overflow-y: auto;padding-top: 0.5em; padding-bottom:0.5em; margin: 0;">
 			<% if !@codes.empty? %>
 				<% @codes.each do |c| %>
 					
 					<div class="col-md-12">	
-						<button  id="emotion-tag-<%=c.id%>" type="button" class="btn btn-default btn-block btn-sm emotion-button"" style="background-color:<%=c.color%>"><%= c.name%></button>
+						<button  id="emotion-tag-<%=c.id%>" type="button" class="btn btn-default btn-block btn-sm emotion-button"" style="background-color:<%=c.color%>">
+							 <strong><%= c.name%></strong>
+								
+							</button>
 					</div>
+
 
 				<% end %>
 			<% else %>
@@ -53,7 +57,7 @@
 			<% end %>
 		</div>
 
-		<div class="row" style="height: 70%;overflow-y: auto">
+		<div class="row" style="height: 60%;overflow-y: auto">
 			<% if !@topics.empty? %>
 				<table id="topicTable" class="table table-bordered table-hover">
 					<% @topics.each do |t| %>

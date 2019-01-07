@@ -10,7 +10,7 @@
   </head>
 
   <body class="h-100">
-    <nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light" style="min-height: 40px;max-height: 50px">
+    <nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light" style="max-height: 50px">
       <a class="navbar-brand" href="#"><img src="/logo.png" height="25px" alt=""> Text Prizm</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -48,31 +48,7 @@
         </ul>
       </div>
     </nav>
-    <div class="container-fluid d-flex h-75 flex-column">
-      <% flash.each do |key, value| %>
-            <% if key == "alert" 
-              key = "warning" 
-            elsif key == "error"
-              key = "danger"
-            elsif key == "notice"
-              key = "info"
-            end %>
-            <% if value.class == Array %>
-              <div class="<%= flash_class(key) %>">
-                <div class="alert alert-<%= key %> alert-dismissable" style="margin-top: 20px; margin-bottom: 0px ">
-                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                  <% value.each do |message| %>  
-                    <%= message %>
-                    </br>
-                  <% end %>
-                </div>
-            <% else %>
-                <div class="alert alert-<%= key %> alert-dismissable" style="margin-top: 20px; margin-bottom: 0px ">
-                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                  <%= value %>
-                </div>
-            <% end %>
-          <% end %>
+    <div class="container-fluid d-flex h-100 flex-column">
       <%= yield %>
     </div>
   </body>
