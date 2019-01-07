@@ -131,30 +131,7 @@
 		        objEvent.preventDefault(); // stops its action
 		    }
 		})
-
-		$('.emotion-button').on('click', function() {
-			tag = $(this)[0]
-			tag_obj = $("#row_active td:nth-child(2) #"+tag.id)[0]
-
-			if( tag_obj==null){
-			$("#row_active td:nth-child(2)").append("<span id= " +tag.id+" class='badge badge-pill badge-info float-right mx-1' style='background-color:"+tag.style.backgroundColor+"'>"+tag.innerText+"</span>")	
-			}
-			else{
-				tag_obj.remove()
-			}			
-			
-		});
-		$('.topic-row').on('click', function() {
-			topic_row = $(this)[0]
-			topic_obj = $("#row_active td:nth-child(2) #"+topic_row.id)[0]
-			if( topic_obj==null){
-			$("#row_active td:nth-child(2)").append("<span id= '" +topic_row.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+topic_row.childNodes[1].className+"'></i></span>")
-			}
-			else{
-				topic_obj.remove()
-			}	
-			
-		});
+		
 		// Select a message from the list by clicking
 		$('#tableMessages').on('click', '.clickable-row', function(event) {
 			if ($(this).hasClass('table-primary')) {
@@ -250,6 +227,24 @@
 	    var emotions = JSON.parse('<%= raw(@codes.to_json) %>');
 	    console.log(emotions);
 
+	    $('.emotion-button').on('click', function() {
+			tag_name = $(this)[0].innerText
+			
+			tag = emotions.find(function(element) { 
+			  return element.name ===tag_name; 
+			}); 
+			
+			tag_obj = $("#row_active td:nth-child(2) #emotion-tag-"+tag.id)[0]
+
+			if( tag_obj==null){
+			$("#row_active td:nth-child(2)").append("<span id= emotion-tag-" +tag.id+" class='badge badge-pill badge-info float-right mx-1' style='background-color:"+tag.color+"'>"+tag.name+"</span>")	
+			}
+			else{
+				tag_obj.remove()
+			}			
+			
+		});
+
 	    var affects = new Bloodhound({
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -291,7 +286,7 @@
 		          	selected = selected[0]
 					selected_obj = $("#row_active td:nth-child(2) #emotion-tag-"+selected.id)[0]
 					if( selected_obj==null){
-					$("#row_active td:nth-child(2)").append("<span id= 'emotion-tag-"+selected.id+"' class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")	
+						$("#row_active td:nth-child(2)").append("<span id= 'emotion-tag-"+selected.id+"' class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")	
 					}
 					else{
 						selected_obj.remove()
@@ -307,6 +302,20 @@
 	    // Set of topics, PENDING: get from controller
 	    var topic = JSON.parse('<%= raw(@topics.to_json) %>')
 
+	    $('.topic-row').on('click', function() {
+			topic_name = $(this)[0].childNodes[3].textContent
+			topic_row = topic.find(function(element) { 
+			  return element.name === topic_name; 
+			}); 
+			topic_obj = $("#row_active td:nth-child(2) #topic-tag-"+topic_row.id)[0]
+			if( topic_obj==null){
+				$("#row_active td:nth-child(2)").append("<span id= 'topic-tag-" +topic_row.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+topic_row.icon+"'></i></span>")
+			}
+			else{
+				topic_obj.remove()
+			}	
+			
+		});
 
 	    var topics = new Bloodhound({
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
