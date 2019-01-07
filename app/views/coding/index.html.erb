@@ -1,13 +1,13 @@
 <div class="row flex-fill d-flex h-100">
 	<div class="flex-fill d-flex col-md-9" >
 		<div class="row flex-fill">
-			<div class="col-md-1" style="background-color:#EBFEFF"> 
+			<!--<div class="col-md-1" style="background-color:#EBFEFF"> 
 				<br><br><br><br><br><br><br><br>
 				<p style="text-orientation:upright;writing-mode: vertical-lr;text-align: center;vertical-align: middle;"> 
 				                        	T  i  m  e  l  i  n  e
 				</p>
-			</div>
-			<div class="col-md-11" style="overflow-y:auto;padding-left: 0;padding-right: 0">
+			</div>-->
+			<div class="col-md-12" style="overflow-y:auto;padding-left: 0;padding-right: 0" id="texts">
 				<!-- <br>Here will be the short texts to be coded with a timeline on the left<br> -->
 				
 				<% if !@texts.empty? %>
@@ -36,20 +36,39 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3" style=" overflow-y:auto;padding-top: 10px">
+	<div class="col-md-3" style="">
 		<!-- <br>Here will be the labels to code the data <br> -->
 
-		<!-- <div class="row">	 -->
-			<% if !@texts.empty? %>
+		<div class="row" style="min-height:40%;max-height: 40%;overflow-y: auto;padding-top: 0.5em; padding-bottom:0.5em; margin: 0">
+			<% if !@codes.empty? %>
 				<% @codes.each do |c| %>
-					<!-- <div class="col-lg-4"> -->
-						<button type="button" class="btn btn-default btn-block" style="background-color:<%=c.color%>"><%= c.name%></button>
-					<!-- </div> -->
+					
+					<div class="col-md-12">	
+						<button type="button" class="btn btn-default btn-block btn-sm" style="background-color:<%=c.color%>"><%= c.name%></button>
+					</div>
+
 				<% end %>
 			<% else %>
 				Here will be the codes when they are uploaded to the database
 			<% end %>
-		<!-- </div> -->
+		</div>
+
+		<div class="row" style="height: 70%;overflow-y: auto">
+			<% if !@topics.empty? %>
+				<table class="table table-bordered table-hover">
+					<% @topics.each do |t| %>
+						<tr>
+							<th>
+								<i class="fe fe-<%=t.icon%>"></i>&nbsp;
+								<small><%= t.name%></small>
+							</th>
+						</tr>
+					<% end %>
+				</table>
+			<% else %>
+				Here will be the topics when they are uploaded to the database
+			<% end %>
+		</div>
 	</div>
 </div>
 
@@ -57,11 +76,38 @@
 <div class="modal fade " id="codingModal" tabindex="-1" role="dialog" aria-labelledby="codingModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
+    	<div class="modal-header" style="padding-bottom: 0">
+    		<ul class="nav nav-tabs nav-fill" id="myTab" role="tablist" style="">
+    			<li class="nav-item">
+			    	<a class="nav-link" id="topic-tab" datatoggle="tab" role="tab" href="#topic" aria-selected="false"><span class="badge badge-secondary">1</span>&nbsp;Topic</a>
+			  	</li>
+			  <li class="nav-item">
+			    <a class="nav-link active" id="affect-tab" datatoggle="tab" role="tab" href="#affect" aria-selected="true"><span class="badge badge-secondary">2</span>&nbsp;Affect</a>
+			  </li>
+			  
+			  <li class="nav-item">
+			    <a class="nav-link" id="valence-tab" datatoggle="tab" role="tab" href="#valence" aria-selected="false">
+			    <span class="badge badge-secondary">3</span>&nbsp;Valence
+				</a>
+			  </li>
+			</ul>
+    	</div>
       <div class="modal-body">
-        <div id="affects">
-          <input class="form-control form-control-lg typeahead" id="inputCodingLabel" type="text" placeholder="Start typing code...">
-        </div>
-        <small class="text-muted float-right">Press esc to close, enter to apply code</small>
+      	<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="affect" role="tabpanel" aria-labelledby="affect-tab">
+				<div id="affects">
+	         		<input class="form-control form-control-lg typeahead" id="inputAffectLabel" type="text" placeholder="Start typing affect..." autofocus>
+	        	</div>
+	        	<small class="text-muted float-right">Press esc to close, enter to apply code</small>
+			</div>
+			<div class="tab-pane fade" id="topic" role="tabpanel" aria-labelledby="topic-tab">
+				<div id="topics">
+	         		<input class="form-control form-control-lg typeahead" id="inputTopicLabel" type="text" placeholder="Start typing topic..." autofocus>
+	        	</div>
+	        	<small class="text-muted float-right">Press esc to close, enter to apply code</small>
+			</div>
+			<div class="tab-pane fade" id="valence" role="tabpanel" aria-labelledby="valence-tab">...</div>
+	    </div>
       </div>
     </div>
   </div>
@@ -75,10 +121,14 @@
 
 	$(document).ready(function () {
 
-		$('#myModal').on('shown.bs.modal', function () {
-  			$('#myInput').trigger('focus')
-		});
+		// Disables tab key
+		$(document).keydown(function(objEvent) {
+		    if (objEvent.keyCode == 9) {  //tab pressed
+		        objEvent.preventDefault(); // stops its action
+		    }
+		})
 
+		// Select a message from the list by clicking
 		$('#tableMessages').on('click', '.clickable-row', function(event) {
 			if ($(this).hasClass('table-primary')) {
 				$(this).removeClass('table-primary').siblings().removeClass('table-primary');
@@ -91,6 +141,10 @@
 			}
 		});
 
+		// Select first message on page load, PENDING: select where the user left
+		$("#tableMessages tr.clickable-row:first").click();
+
+		// Navigation through message list using key up and down, PENDING: Add IJKL or WASD
 		$('html').keydown(function(e){
 			if ($("#codingModal").hasClass("show") == false){
 				switch(e.keyCode){
@@ -137,28 +191,37 @@
 
 		});
 
-		// Coding Modal
+		// Open Coding Modal by pressing any key
 	    $('html').keypress(function(e){
-	    	$('#codingModal').modal('show')
+	    	if ($("#codingModal").hasClass("show") == false){
+		    	console.log("ACA")
+		    	$('#codingModal').modal('show')
+		    	$('#myTab li:first-child a').tab('show')
+		    	$('#inputAffectLabel').trigger('focus')
+		    }
 	    });
 
+	    $("#myTab").on('shown.bs.tab', function (e) { 
+	    	if($("#myTab a.active").attr("id") == "affect-tab"){
+	    		$('#inputAffectLabel').trigger('focus')
+	    	}else if($("#myTab a.active").attr("id") == "topic-tab"){
+	    		$('#inputTopicLabel').trigger('focus')
+	    	}else if($("#myTab a.active").attr("id") == "valence-tab"){
+	    		//$('#inputValene').trigger('focus')	
+	    	}
+	    });
+
+	    // Focus input on Coding Modal
 	    $('#codingModal').on('shown.bs.modal', function () {
-	    	$('#inputCodingLabel').trigger('focus')
+	    	if($("#myTab a.active").attr("id") == "affect-tab"){
+	    		$('#inputAffectLabel').trigger('focus')
+	    	}else if($("#myTab a.active").attr("id") == "topic-tab"){
+	    		$('#inputTopicLabel').trigger('focus')
+	    	}
 	    });
 
-		emotions = [{"id": 17, "name": "anger", "color": "#FC5C56"},
-		 {"id": 18, "name": "anticipation", "color": "#FFB05C"},
-		 {"id": 19, "name": "joy", "color": "#FFE663"},
-		 {"id": 20, "name": "trust", "color": "#B5FC68"},
-		 {"id": 21, "name": "fear", "color": "#41DB8A"},
-		 {"id": 22, "name": "surprise", "color": "#3CE8FF"},
-		 {"id": 23, "name": "sadness", "color": "#519DFC"},
-		 {"id": 24, "name": "disgust", "color": "#B563FB"},
-		 {"id": 25, "name": "accusation", "color": "#FC5C56"},
-		 {"id": 25, "name": "support", "color": "#41DB8A"},
-		 {"id": 25, "name": "unknown", "color": "#6B757C"},
-		 {"id": 25, "name": "irrelevant", "color": "#6B757C"}];
-
+	    var emotions = JSON.parse('<%= raw(@codes.to_json) %>');
+	    console.log(emotions);
 
 	    var affects = new Bloodhound({
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
@@ -206,5 +269,122 @@
 		        }
 	        }
 	    });
+
+	    // Set of topics, PENDING: get from controller
+	    var topic = JSON.parse('<%= raw(@topics.to_json) %>')
+
+
+	    var topics = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			local: topic
+	    });
+
+	    topics.initialize();
+
+	    $('#topics .typeahead').typeahead({
+			hint: true,
+			highlight: true,
+			minLength: 1
+	    },
+	    {
+			name: 'topics',
+			display: 'name',
+			valueKey: "id",
+			source: topics,
+			templates:{
+				suggestion: Handlebars.compile('<div></div>')
+			}
+	    });
+
+
+	    $('#inputTopicLabel').on('keydown', function(event) {	
+	        if(event.which == 13) {
+
+	          	typeahead = $(this).data().ttTypeahead;
+	          	hint = typeahead.input.$hint.val();
+	          	val = typeahead.input.query;
+
+	          	console.log("HINT: " + hint)
+	          	console.log("VAL: " + val)
+
+	          	console.log("hint exists?: " + topic.some(m => m.name.localeCompare(hint)))
+	          	console.log("val exists?: " + topic.some(m => m.name.localeCompare(val)))
+
+	          	if (topic.some(m => hint.localeCompare(m.name)) | topic.some(m => m.name === val.toUpperCase())){
+		          	if(hint != ""){
+		          		selected = topic.filter(obj => {return obj.name === hint})
+		          	}else{
+		          		selected = topic.filter(obj => {return obj.name === val})
+		          	}
+
+		          	selected = selected[0]
+
+		          	console.log(selected.name)
+		          	
+		          	$("#row_active td:nth-child(2)").append("<span class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+selected.icon+"'></i></span>")
+		          	$('.typeahead').typeahead('val', '');
+		            $("#codingModal").modal("hide");
+		        }
+	        }
+	    });
+
+	    // Navigate through coding modal tabs or open directly pressing 1 => affect, 2 => topic or 3 => valence
+	    $('html').on('keydown', function(event) {	
+
+	    	if (event.which == 49 | event.which == 50 | event.which == 51){
+		    	if ($("#codingModal").hasClass("show") == false){
+			    	console.log("ACA")
+			    	$('#codingModal').modal('show')
+			    	//$('#myTab li:first-child a').tab('show')
+			    }
+			}
+
+	    	if(event.which == 49) {
+	    		console.log("1")
+	    		event.preventDefault();
+	    		event.stopPropagation();
+	    		if($("#myTab a.active").attr("id") == "topic-tab"){
+	    			console.log("nada")
+	    		}else{
+	    			$('#topic-tab').tab("show");
+	    		}
+	    		$('#inputTopicLabel').focus()
+	    	}else if(event.which == 50){
+	    		event.preventDefault();
+	    		event.stopPropagation();
+	    		console.log("2")
+	    		if($("#myTab a.active").attr("id") == "affect-tab"){
+	    			console.log("nada")
+	    		}else{
+	    			$('#affect-tab').tab("show");
+	    		}
+	    		$('#inputAffectLabel').focus()
+
+	    	}else if(event.which == 51){
+	    		event.preventDefault();
+	    		event.stopPropagation();
+	    		console.log("3")
+	    		$('#valence-tab').tab("show");
+
+	    	}
+	    });
+
+
+	    // Tab initialization
+	    $('#myTab a').on('click', function (e) {
+		  e.preventDefault()
+		  $(this).tab('show')
+
+		  //href = $(e.target).attr('href')
+
+		  //if(href == "#topic"){
+		  //	console.log("Tab topic")
+		  //	$("#inputTopicLabel").trigger('focus')
+		  //}else if(href == "#affect"){
+		  //	console.log("Tab Affect")
+		  //	$("#inputAffectLabel").trigger('focus')
+		  //}
+		})
 	});
 </script>

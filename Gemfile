@@ -30,6 +30,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootstrap', '~> 4.1.3'
 gem 'jquery-rails'
 gem 'feathericon-rails'
+gem 'devise'
 
 
 #gem 'bootstrap-typeahead-rails'

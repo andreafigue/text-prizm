@@ -10,19 +10,69 @@
   </head>
 
   <body class="h-100">
-    <nav class="navbar fixed-top navbar-light bg-light">
-      <div class="navbar-item" href="#"><img src="/logo.png" height="25" alt=""> Text Prizm</div>
-      <form class="form-inline float-right">
-        <div class="input-group input-group-sm">
-          <input type="text" class="form-control form-control-sm" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button class="input-group-text form-control-sm" type="submit" id="basic-addon2"><i class="fe fe-search"></i></button>
+    <nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light" style="min-height: 40px;max-height: 50px">
+      <a class="navbar-brand" href="#"><img src="/logo.png" height="25px" alt=""> Text Prizm</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <% if user_signed_in?%>
+            <li class="nav-item dropdown"> 
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"  id="DropdownToggle1" style="min-width: 100px;">
+                <span class="fe fe-user"></span> &nbsp;
+                <%= current_user.name %> 
+              </a>
+              <div class="dropdown-menu" aria-labelledly="DropdownToggle1">
+                <!--<div class="dropdown-divider"></div>-->
+                  <%= link_to "<span class='fe fe-logout'></span>&nbsp;Log Out".html_safe, destroy_user_session_path, :method => :delete,:class => :"dropdown-item"   %>
+              </div>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link_to  new_user_session_path, :class => :"nav-link" do%>                 
+                <span class="fe fe-login"></span> 
+                Log In    
+              <% end %>
+            </li>
+          <% end %> 
+        <!--<form class="form-inline float-right">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control form-control-sm" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button class="input-group-text form-control-sm" type="submit" id="basic-addon2"><i class="fe fe-search"></i></button>
+            </div>
           </div>
-        </div>
-      </form>
-      <!--<i class="fe fe-elipsis-v"></i>-->
+        </form>-->
+        <!--<i class="fe fe-elipsis-v"></i>-->
+        </ul>
+      </div>
     </nav>
     <div class="container-fluid d-flex h-100 flex-column">
+      <% flash.each do |key, value| %>
+            <% if key == "alert" 
+              key = "warning" 
+            elsif key == "error"
+              key = "danger"
+            elsif key == "notice"
+              key = "info"
+            end %>
+            <% if value.class == Array %>
+              <div class="<%= flash_class(key) %>">
+                <div class="alert alert-<%= key %> alert-dismissable" style="margin-top: 20px; margin-bottom: 0px ">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <% value.each do |message| %>  
+                    <%= message %>
+                    </br>
+                  <% end %>
+                </div>
+            <% else %>
+                <div class="alert alert-<%= key %> alert-dismissable" style="margin-top: 20px; margin-bottom: 0px ">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <%= value %>
+                </div>
+            <% end %>
+          <% end %>
       <%= yield %>
     </div>
   </body>
