@@ -24,7 +24,7 @@
 								<tr class="clickable-row" text_id="<%= t.id%>">
 									<td><small><%= t.username %></small></td>
 									<td><small><%= t.text %></small>
-										<% aux = current_user.codings.find_by(text_id: t.id)%>
+										<% aux = @codings.find_by(text_id: t.id)%>
 										<% if !aux.nil? %>
 
 											<% if !aux.code_1.nil?%>
@@ -34,6 +34,11 @@
 											<% if !aux.code_2.nil?%>
 												<span id="emotion-tag-<%=aux.code_2.id%>" class='badge badge-pill badge-info float-right mx-1' style="background-color:<%=aux.code_2.color%>"> <%= aux.code_2.name %></span>
 											<% end %>
+
+											<% if !aux.topic.nil?%>
+												<span id= 'topic-tag-<%=aux.topic.id%>' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-<%=aux.topic.icon%>'></i></span>
+											<% end %>
+
 										<% end %>
 
 									</td>
@@ -363,11 +368,28 @@
 			  return element.name === topic_name; 
 			}); 
 			topic_obj = $("#row_active td:nth-child(2) #topic-tag-"+topic_row.id)[0]
+			text_id = $("#row_active").attr("text_id")
 			if( topic_obj==null){
 				$("#row_active td:nth-child(2)").append("<span id= 'topic-tag-" +topic_row.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+topic_row.icon+"'></i></span>")
+				$.ajax({
+						  type: "POST", 
+						  url: "/coding/add_topic",
+						  data: {text_id: text_id, topic_id: topic_row.id},
+
+						  //success: function(data, textStatus, jqXHR){...},
+						  //error: function(jqXHR, textStatus, errorThrown){...}
+						})
 			}
 			else{
 				topic_obj.remove()
+				$.ajax({
+						  type: "POST", 
+						  url: "/coding/remove_topic",
+						  data: {text_id: text_id, topic_id: topic_row.id},
+
+						  //success: function(data, textStatus, jqXHR){...},
+						  //error: function(jqXHR, textStatus, errorThrown){...}
+						})
 			}	
 			
 		});
@@ -418,11 +440,28 @@
 
 		          	selected = selected[0]
 		          	selected_obj = $("#row_active td:nth-child(2) #topic-tag-"+selected.id)[0]
+		          	text_id = $("#row_active").attr("text_id")
 					if( selected_obj == null){
-					$("#row_active td:nth-child(2)").append("<span id= 'topic-tag-" +selected.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+selected.icon+"'></i></span>")
+						$("#row_active td:nth-child(2)").append("<span id= 'topic-tag-" +selected.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+selected.icon+"'></i></span>")
+						$.ajax({
+						  type: "POST", 
+						  url: "/coding/add_topic",
+						  data: {text_id: text_id, topic_id: selected.id},
+
+						  //success: function(data, textStatus, jqXHR){...},
+						  //error: function(jqXHR, textStatus, errorThrown){...}
+						})
 					}
 					else{
 						selected_obj.remove()
+						$.ajax({
+						  type: "POST", 
+						  url: "/coding/remove_topic",
+						  data: {text_id: text_id, topic_id: selected.id},
+
+						  //success: function(data, textStatus, jqXHR){...},
+						  //error: function(jqXHR, textStatus, errorThrown){...}
+						})
 					}	
 			
 		          	//console.log(selected.name)

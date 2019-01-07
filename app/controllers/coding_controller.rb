@@ -5,13 +5,43 @@ class CodingController < ApplicationController
   	@texts = Text.all
   	@codes = Code.all
   	@topics = Topic.all
+  	@codings = current_user.codings
+  	@codings.cache_key
   end
 
   def add_topic
 
-  end
+  	text_id = Integer(params[:text_id])
+  	topic_id = Integer(params[:topic_id])
 
-  def remove_topic
+  	coding = Coding.find_by(user: current_user, text_id: text_id)
+
+  	if coding.nil?
+  		coding = Coding.new
+  		coding.user = current_user
+  		coding.text = Text.find(text_id)
+  		coding.topic = Topic.find(topic_id)
+  		
+  		if coding.save
+  			puts "Coding created"
+  		else
+  			coding.errors.messages.each do |attr,msg|
+		        puts(attr,msg)
+		    end
+  		end
+  	else
+  		if coding.topic.nil?
+  			coding.topic_id = topic_id
+  		end
+
+  		if coding.save
+  			puts "Coding updated"
+  		else
+  			coding.errors.messages.each do |attr,msg|
+		        puts(attr,msg)
+		    end
+		end
+  	end
 
   end
 
@@ -48,6 +78,32 @@ class CodingController < ApplicationController
   		if coding.save
   			puts "Coding updated"
   		end
+  	end
+
+  end
+
+  def remove_topic
+
+  	text_id = Integer(params[:text_id])
+  	topic_id = Integer(params[:topic_id])
+
+  	coding = Coding.find_by(user: current_user, text_id: text_id)
+
+  	if coding.nil?
+  		puts "Coding doesn't exists"
+  	else
+  		if coding.topic_id == topic_id
+  			coding.topic = nil
+  		end
+
+  		if coding.save
+  			puts "Coding Removed"
+  		else
+  			coding.errors.messages.each do |attr,msg|
+		       puts(attr,msg)
+		    end
+  		end
+
   	end
 
   end

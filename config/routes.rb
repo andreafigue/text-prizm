@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   	post "coding/add_code", "coding#add_code"
   	post "coding/remove_code", "coding#remove_code"
+
+  	post "coding/add_topic", "coding#add_topic"
+  	post "coding/remove_topic", "coding#remove_topic"
   end
 
   root "coding#index"
