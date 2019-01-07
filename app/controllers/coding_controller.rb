@@ -54,6 +54,32 @@ class CodingController < ApplicationController
 
   def remove_code
 
+  	text_id = Integer(params[:text_id])
+  	code_id = Integer(params[:code_id])
+
+  	puts "Removing Code"
+
+  	coding = Coding.find_by(user: current_user, text_id: text_id)
+
+  	if coding.nil?
+  		puts "Coding doesn't exists"
+  	else
+  		if coding.code_1_id == code_id
+  			coding.code_1 = nil
+  		elsif coding.code_2_id == code_id
+  			coding.code_2 = nil
+  		end
+
+  		if coding.save
+  			puts "Coding Removed"
+  		else
+  			coding.errors.messages.each do |attr,msg|
+		        puts(attr,msg)
+		    end
+  		end
+
+  	end
+
   end
 
   def verify_is_user
