@@ -4,6 +4,9 @@ Rails.application.routes.draw do
 
   authenticate :user do
   	get "welcome/index", 'welcome#index'
+
+  	post "coding/add_code", "coding#add_code"
+  	post "coding/remove_code", "coding#remove_code"
   end
 
   root "coding#index"

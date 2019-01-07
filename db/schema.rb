@@ -10,13 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_07_024831) do
+ActiveRecord::Schema.define(version: 2019_01_07_060924) do
 
   create_table "codes", force: :cascade do |t|
     t.string "name"
     t.string "color"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "codings", force: :cascade do |t|
+    t.integer "text_id"
+    t.integer "code_1_id"
+    t.integer "code_2_id"
+    t.integer "topic_id"
+    t.integer "valence"
+    t.boolean "starred"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code_1_id"], name: "index_codings_on_code_1_id"
+    t.index ["code_2_id"], name: "index_codings_on_code_2_id"
+    t.index ["text_id"], name: "index_codings_on_text_id"
+    t.index ["topic_id"], name: "index_codings_on_topic_id"
+    t.index ["user_id"], name: "index_codings_on_user_id"
   end
 
   create_table "texts", force: :cascade do |t|

@@ -21,7 +21,7 @@
 						</thead>
 						<tbody>
 							<% @texts.each do |t| %>
-								<tr class="clickable-row">
+								<tr class="clickable-row" text_id="<%= t.id%>">
 									<td><small><%= t.username %></small></td>
 									<td><small><%= t.text %></small></td>
 									<td><small><%= t.date.to_formatted_s(:long_ordinal) %></small></td>
@@ -137,7 +137,18 @@
 			tag_obj = $("#row_active td:nth-child(2) #"+tag.id)[0]
 
 			if( tag_obj==null){
-			$("#row_active td:nth-child(2)").append("<span id= " +tag.id+" class='badge badge-pill badge-info float-right mx-1' style='background-color:"+tag.style.backgroundColor+"'>"+tag.innerText+"</span>")	
+				$("#row_active td:nth-child(2)").append("<span id= " +tag.id+" class='badge badge-pill badge-info float-right mx-1' style='background-color:"+tag.style.backgroundColor+"'>"+tag.innerText+"</span>")	
+
+				text_id = $("#row_active").attr("text_id")
+				
+				$.ajax({
+				  type: "POST", 
+				  url: "/coding/add_code",
+				  data: {text_id: text_id, code_id: tag.id},
+
+				  //success: function(data, textStatus, jqXHR){...},
+				  //error: function(jqXHR, textStatus, errorThrown){...}
+				})
 			}
 			else{
 				tag_obj.remove()
@@ -155,6 +166,8 @@
 			}	
 			
 		});
+
+
 		// Select a message from the list by clicking
 		$('#tableMessages').on('click', '.clickable-row', function(event) {
 			if ($(this).hasClass('table-primary')) {
@@ -290,8 +303,19 @@
 
 		          	selected = selected[0]
 					selected_obj = $("#row_active td:nth-child(2) #emotion-tag-"+selected.id)[0]
-					if( selected_obj==null){
-					$("#row_active td:nth-child(2)").append("<span id= 'emotion-tag-"+selected.id+"' class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")	
+
+					text_id = $("#row_active").attr("text_id")
+
+					if( selected_obj == null){
+						$("#row_active td:nth-child(2)").append("<span id= 'emotion-tag-"+selected.id+"' class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")	
+						$.ajax({
+						  type: "POST", 
+						  url: "/coding/add_code",
+						  data: {text_id: text_id, code_id: selected.id},
+
+						  //success: function(data, textStatus, jqXHR){...},
+						  //error: function(jqXHR, textStatus, errorThrown){...}
+						})
 					}
 					else{
 						selected_obj.remove()
