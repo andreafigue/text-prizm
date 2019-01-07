@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  text: one
+  code: one
+  valence: 1
+  starred: false
+  user: one
+
+two:
+  text: two
+  code: two
+  valence: 1
+  starred: false
+  user: two

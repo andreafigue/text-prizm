@@ -253,6 +253,16 @@
 
 			else{
 				tag_obj.remove()
+				text_id = $("#row_active").attr("text_id")
+				
+				$.ajax({
+				  type: "POST", 
+				  url: "/coding/remove_code",
+				  data: {text_id: text_id, code_id: tag.id},
+
+				  //success: function(data, textStatus, jqXHR){...},
+				  //error: function(jqXHR, textStatus, errorThrown){...}
+				})
 			}			
 			
 		});
@@ -313,6 +323,15 @@
 					}
 					else{
 						selected_obj.remove()
+
+						$.ajax({
+						  type: "POST", 
+						  url: "/coding/remove_code",
+						  data: {text_id: text_id, code_id: selected.id},
+
+						  //success: function(data, textStatus, jqXHR){...},
+						  //error: function(jqXHR, textStatus, errorThrown){...}
+						})
 					}			
 		          	//if(asd)
 		          	//$("#row_active td:nth-child(2)").append("<span class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")
