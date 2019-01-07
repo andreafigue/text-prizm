@@ -359,7 +359,7 @@
 	        }
 	    });
 
-	    // Set of topics, PENDING: get from controller
+	    // Set of topics, PENDING: get from controllerhint
 	    var topic = JSON.parse('<%= raw(@topics.to_json) %>')
 
 	    $('.topic-row').on('click', function() {
@@ -427,15 +427,14 @@
 
 	          	console.log("HINT: " + hint)
 	          	console.log("VAL: " + val)
-
 	          	console.log("hint exists?: " + topic.some(m => m.name.localeCompare(hint)))
-	          	console.log("val exists?: " + topic.some(m => m.name.localeCompare(val)))
-
-	          	if (topic.some(m => hint.localeCompare(m.name)) | topic.some(m => m.name === val.toUpperCase())){
+	          	console.log("val exists?: " + topic.some(m => m.name.localeCompare(val,undefined, { sensitivity: 'base' })===0))
+	          	//if (topic.some(m => hint.localeCompare(m.name)) | topic.some(m => m.name.localeCompare(val,undefined, { sensitivity: 'base' }) === 0)){
+	          	if (topic.some(m => m.name.localeCompare(hint,undefined, { sensitivity: 'base' })===0 ) | topic.some(m => m.name.localeCompare(val,undefined, { sensitivity: 'base' }) === 0)){
 		          	if(hint != ""){
-		          		selected = topic.filter(obj => {return obj.name === hint})
+		          		selected = topic.filter(obj => {return obj.name.localeCompare(hint,undefined, { sensitivity: 'base' })===0})
 		          	}else{
-		          		selected = topic.filter(obj => {return obj.name === val})
+		          		selected = topic.filter(obj => {return obj.name.localeCompare(val,undefined, { sensitivity: 'base' })===0})
 		          	}
 
 		          	selected = selected[0]
