@@ -44,7 +44,7 @@
 				<% @codes.each do |c| %>
 					
 					<div class="col-md-12">	
-						<button type="button" class="btn btn-default btn-block btn-sm" style="background-color:<%=c.color%>"><%= c.name%></button>
+						<button  id="emotion-tag-<%=c.id%>" type="button" class="btn btn-default btn-block btn-sm emotion-button"" style="background-color:<%=c.color%>"><%= c.name%></button>
 					</div>
 
 				<% end %>
@@ -55,10 +55,10 @@
 
 		<div class="row" style="height: 70%;overflow-y: auto">
 			<% if !@topics.empty? %>
-				<table class="table table-bordered table-hover">
+				<table id="topicTable" class="table table-bordered table-hover">
 					<% @topics.each do |t| %>
 						<tr>
-							<th>
+							<th id="topic-tag-<%=t.id%>" class="topic-row" >
 								<i class="fe fe-<%=t.icon%>"></i>&nbsp;
 								<small><%= t.name%></small>
 							</th>
@@ -128,6 +128,29 @@
 		    }
 		})
 
+		$('.emotion-button').on('click', function() {
+			tag = $(this)[0]
+			tag_obj = $("#row_active td:nth-child(2) #"+tag.id)[0]
+
+			if( tag_obj==null){
+			$("#row_active td:nth-child(2)").append("<span id= " +tag.id+" class='badge badge-pill badge-info float-right mx-1' style='background-color:"+tag.style.backgroundColor+"'>"+tag.innerText+"</span>")	
+			}
+			else{
+				tag_obj.remove()
+			}			
+			
+		});
+		$('.topic-row').on('click', function() {
+			topic_row = $(this)[0]
+			topic_obj = $("#row_active td:nth-child(2) #"+topic_row.id)[0]
+			if( topic_obj==null){
+			$("#row_active td:nth-child(2)").append("<span id= '" +topic_row.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+topic_row.childNodes[1].className+"'></i></span>")
+			}
+			else{
+				topic_obj.remove()
+			}	
+			
+		});
 		// Select a message from the list by clicking
 		$('#tableMessages').on('click', '.clickable-row', function(event) {
 			if ($(this).hasClass('table-primary')) {
@@ -262,8 +285,15 @@
 		          	}
 
 		          	selected = selected[0]
-		          	
-		          	$("#row_active td:nth-child(2)").append("<span class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")
+					selected_obj = $("#row_active td:nth-child(2) #emotion-tag-"+selected.id)[0]
+					if( selected_obj==null){
+					$("#row_active td:nth-child(2)").append("<span id= 'emotion-tag-"+selected.id+"' class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")	
+					}
+					else{
+						selected_obj.remove()
+					}			
+		          	//if(asd)
+		          	//$("#row_active td:nth-child(2)").append("<span class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")
 		          	$('.typeahead').typeahead('val', '');
 		            $("#codingModal").modal("hide");
 		        }
@@ -319,10 +349,17 @@
 		          	}
 
 		          	selected = selected[0]
-
-		          	console.log(selected.name)
+		          	selected_obj = $("#row_active td:nth-child(2) #topic-tag-"+selected.id)[0]
+					if( selected_obj == null){
+					$("#row_active td:nth-child(2)").append("<span id= 'topic-tag-" +selected.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+selected.icon+"'></i></span>")
+					}
+					else{
+						selected_obj.remove()
+					}	
+			
+		          	//console.log(selected.name)
 		          	
-		          	$("#row_active td:nth-child(2)").append("<span class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+selected.icon+"'></i></span>")
+		          	//$("#row_active td:nth-child(2)").append("<span class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+selected.icon+"'></i></span>")
 		          	$('.typeahead').typeahead('val', '');
 		            $("#codingModal").modal("hide");
 		        }
