@@ -138,6 +138,82 @@ class CodingController < ApplicationController
 
   end
 
+  def add_valence
+
+  	text_id = Integer(params[:text_id])
+  	valence = params[:valence]
+
+  	case valence
+  	when "unknown"
+  		valence_int = 0
+  	when "positive"
+  		valence_int = 1
+  	when "neutral"
+  		valence_int = 2
+  	when "negative"
+  		valence_int = 3  		
+  	end
+
+  	coding = Coding.find_by(user: current_user, text_id: text_id)
+
+  	if coding.nil?
+  		coding = Coding.new
+  		coding.user = current_user
+  		coding.text = Text.find(text_id)
+  		coding.valence = valence_int
+  		
+  		if coding.save
+  			puts "Coding created"
+  		else
+  			coding.errors.messages.each do |attr,msg|
+		        puts(attr,msg)
+		    end
+  		end
+  	else
+  		coding.valence = valence_int
+
+  		if coding.save
+  			puts "Coding updated"
+  		else
+  			coding.errors.messages.each do |attr,msg|
+		        puts(attr,msg)
+		    end
+		end
+  	end
+
+  	
+  end
+
+  def remove_valence
+  	text_id = Integer(params[:text_id])
+  	valence = params[:valence]
+
+  	case valence
+  	when "unknown"
+  		valence_int = 0
+  	when "positive"
+  		valence_int = 1
+  	when "neutral"
+  		valence_int = 2
+  	when "negative"
+  		valence_int = 3  		
+  	end
+
+  	coding = Coding.find_by(user: current_user, text_id: text_id)
+
+  	if !coding.nil? and coding.valence == valence_int
+  		coding.valence = nil
+  		
+  		if coding.save
+  			puts "Coding Removed"
+  		else
+  			coding.errors.messages.each do |attr,msg|
+		        puts(attr,msg)
+		    end
+  		end
+  	end
+  end
+
   def verify_is_user
     (current_user.nil?) ? redirect_to(root_path) : (redirect_to(root_path)) unless current_user
   end

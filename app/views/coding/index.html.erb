@@ -16,14 +16,18 @@
 							<tr>
 								<th scope="col"><small><strong>Username</strong></small></th>
 								<th scope="col"><small><strong>Text</strong></small></th> 
-								<th scope="col" width="15%"><small><strong>Date</strong></small></th>
+								<th scope="col" width="12%"><small><strong>Valence</strong></small></th>
 							</tr>
 						</thead>
 						<tbody>
 							<% @texts.each do |t| %>
 								<tr class="clickable-row" text_id="<%= t.id%>">
 									<td><small><%= t.username %></small></td>
-									<td><small><%= t.text %></small>
+									<td>
+										<small>
+											<%= t.text %>
+											<!--<i class='fe fe-star-o float-right'></i>-->
+										</small>
 										<% aux = @codings.find_by(text_id: t.id)%>
 										<% if !aux.nil? %>
 
@@ -42,7 +46,20 @@
 										<% end %>
 
 									</td>
-									<td><small><%= t.date.to_formatted_s(:long_ordinal) %></small></td>
+									<td>
+										<% if !aux.nil? %>
+											<i class='fe fe-smile valence-positive valence <%= aux.valence == 1 ? "valence-active valence-positive-selected": nil%>' valence="positive" data-toggle="tooltip" title="Positive"></i>&nbsp;
+											<i class='fe fe-open-mouth valence-neutral valence <%= aux.valence == 2 ? "valence-active valence-neutral-selected": nil%>' valence="neutral" data-toggle="tooltip" title="Neutral"></i>&nbsp;
+											<i class='fe fe-angry valence-negative valence <%= aux.valence == 3 ? "valence-active valence-negative-selected": nil%>' valence="negative" data-toggle="tooltip" title="Negative"></i>&nbsp;
+											<i class='fe fe-question valence-unknown valence <%= aux.valence == 0 ? "valence-active valence-unknown-selected": nil%>' valence="unknown" data-toggle="tooltip" title="Unknown"></i>
+										<% else %>
+											<i class='fe fe-smile valence-positive valence' valence="positive" data-toggle="tooltip" title="Positive"></i>&nbsp;
+											<i class='fe fe-open-mouth valence-neutral valence' valence="neutral" data-toggle="tooltip" title="Neutral"></i>&nbsp;
+											<i class='fe fe-angry valence-negative valence' valence="negative" data-toggle="tooltip" title="Negative"></i>&nbsp;
+											<i class='fe fe-question valence-unknown valence' valence="unknown" data-toggle="tooltip" title="Unknown"></i>
+										<% end %>
+										
+									</td>
 								</tr>
 								<!--<small><%= t.username + ": " + t.text %></small><br>-->
 							<% end %>
@@ -57,15 +74,14 @@
 	<div class="col-md-3" >
 		<!-- <br>Here will be the labels to code the data <br> -->
 
-		<div class="row" style="min-height:40%;max-height: 40%;overflow-y: auto;padding-top: 0.5em; padding-bottom:0.5em; margin: 0;">
+		<div class="row" style="min-height:30%;max-height: 30%;overflow-y: auto;padding-top: 0.5em; padding-bottom:0.5em; margin: 0;">
 			<% if !@codes.empty? %>
 				<% @codes.each do |c| %>
 					
-					<div class="col-md-12">	
+					<div class="col-md-6" style="padding: 2px;">	
 						<button  id="emotion-tag-<%=c.id%>" type="button" class="btn btn-default btn-block btn-sm emotion-button"" style="background-color:<%=c.color%>">
-							 <strong><%= c.name%></strong>
-								
-							</button>
+							 <strong><%= c.name%></strong>		
+						</button>
 					</div>
 
 
@@ -75,13 +91,13 @@
 			<% end %>
 		</div>
 
-		<div class="row" style="height: 60%;overflow-y: auto">
+		<div class="row" style="height: 70%;overflow-y: auto;">
 			<% if !@topics.empty? %>
-				<table id="topicTable" class="table table-bordered table-hover">
+				<table id="topicTable" class="table table-bordered table-hover table-sm" style="margin-bottom: 0">
 					<% @topics.each do |t| %>
 						<tr>
 							<th id="topic-tag-<%=t.id%>" class="topic-row" >
-								<i class="fe fe-<%=t.icon%>"></i>&nbsp;
+								&nbsp;<i class="fe fe-<%=t.icon%>"></i>&nbsp;
 								<small><%= t.name%></small>
 							</th>
 						</tr>
@@ -128,7 +144,16 @@
 	        	</div>
 	        	<small class="text-muted float-right">Press esc to close, enter to apply code</small>
 			</div>
-			<div class="tab-pane fade" id="valence" role="tabpanel" aria-labelledby="valence-tab">...</div>
+			<div class="tab-pane fade" id="valence" role="tabpanel" aria-labelledby="valence-tab">
+				<br>
+				<h1><center>
+					<i class='fe fe-smile valence-positive ' data-toggle="tooltip" title="Positive"></i>&nbsp;&nbsp;
+					<i class='fe fe-open-mouth valence-neutral' data-toggle="tooltip" title="Neutral"></i>&nbsp;&nbsp;
+					<i class='fe fe-angry valence-negative' data-toggle="tooltip" title="Negative"></i>&nbsp;&nbsp;
+					<i class='fe fe-question valence-unknown' data-toggle="tooltip" title="Unknown"></i>
+				</h1></center>
+				<br>
+			</div>
 	    </div>
       </div>
     </div>
@@ -152,11 +177,7 @@
 
 		// Select a message from the list by clicking
 		$('#tableMessages').on('click', '.clickable-row', function(event) {
-			if ($(this).hasClass('table-primary')) {
-				$(this).removeClass('table-primary').siblings().removeClass('table-primary');
-				$(this).attr("id", null);
-				$(this).siblings().attr("id", null)
-			}else{
+			if (!$(this).hasClass('table-primary')) {
 				$(this).addClass('table-primary').siblings().removeClass('table-primary');
 				$(this).siblings().attr("id", null)
 				$(this).attr("id", "row_active");
@@ -216,7 +237,7 @@
 		// Open Coding Modal by pressing any key
 	    $('html').keypress(function(e){
 	    	if ($("#codingModal").hasClass("show") == false){
-		    	console.log("ACA")
+		    	//console.log("ACA")
 		    	$('#codingModal').modal('show')
 		    	$('#myTab li:first-child a').tab('show')
 		    	$('#inputAffectLabel').trigger('focus')
@@ -243,7 +264,7 @@
 	    });
 
 	    var emotions = JSON.parse('<%= raw(@codes.to_json) %>');
-	    console.log(emotions);
+	    //console.log(emotions);
 
 	    $('.emotion-button').on('click', function() {
 			tag_name = $(this)[0].innerText
@@ -425,10 +446,10 @@
 	          	hint = typeahead.input.$hint.val();
 	          	val = typeahead.input.query;
 
-	          	console.log("HINT: " + hint)
-	          	console.log("VAL: " + val)
-	          	console.log("hint exists?: " + topic.some(m => m.name.localeCompare(hint)))
-	          	console.log("val exists?: " + topic.some(m => m.name.localeCompare(val,undefined, { sensitivity: 'base' })===0))
+	          	//console.log("HINT: " + hint)
+	          	//console.log("VAL: " + val)
+	          	//console.log("hint exists?: " + topic.some(m => m.name.localeCompare(hint)))
+	          	//console.log("val exists?: " + topic.some(m => m.name.localeCompare(val,undefined, { sensitivity: 'base' })===0))
 	          	//if (topic.some(m => hint.localeCompare(m.name)) | topic.some(m => m.name.localeCompare(val,undefined, { sensitivity: 'base' }) === 0)){
 	          	if (topic.some(m => m.name.localeCompare(hint,undefined, { sensitivity: 'base' })===0 ) | topic.some(m => m.name.localeCompare(val,undefined, { sensitivity: 'base' }) === 0)){
 		          	if(hint != ""){
@@ -477,14 +498,14 @@
 
 	    	if (event.which == 49 | event.which == 50 | event.which == 51){
 		    	if ($("#codingModal").hasClass("show") == false){
-			    	console.log("ACA")
+			    	//console.log("ACA")
 			    	$('#codingModal').modal('show')
 			    	//$('#myTab li:first-child a').tab('show')
 			    }
 			}
 
 	    	if(event.which == 49) {
-	    		console.log("1")
+	    		//console.log("1")
 	    		event.preventDefault();
 	    		event.stopPropagation();
 	    		if($("#myTab a.active").attr("id") == "topic-tab"){
@@ -496,7 +517,7 @@
 	    	}else if(event.which == 50){
 	    		event.preventDefault();
 	    		event.stopPropagation();
-	    		console.log("2")
+	    		//console.log("2")
 	    		if($("#myTab a.active").attr("id") == "affect-tab"){
 	    			console.log("nada")
 	    		}else{
@@ -507,7 +528,7 @@
 	    	}else if(event.which == 51){
 	    		event.preventDefault();
 	    		event.stopPropagation();
-	    		console.log("3")
+	    		//console.log("3")
 	    		$('#valence-tab').tab("show");
 
 	    	}
@@ -518,16 +539,58 @@
 	    $('#myTab a').on('click', function (e) {
 		  e.preventDefault()
 		  $(this).tab('show')
-
-		  //href = $(e.target).attr('href')
-
-		  //if(href == "#topic"){
-		  //	console.log("Tab topic")
-		  //	$("#inputTopicLabel").trigger('focus')
-		  //}else if(href == "#affect"){
-		  //	console.log("Tab Affect")
-		  //	$("#inputAffectLabel").trigger('focus')
-		  //}
 		})
+
+		// Hover on valence emojis
+		$(".valence").hover(function () {
+			$(this).addClass("valence-" + $(this).attr("valence") + "-hover")
+		}, function(){
+			$(this).removeClass("valence-" + $(this).attr("valence") + "-hover")
+		});
+
+		function addValence(text_id, valence){
+			$.ajax({
+				  type: "POST", 
+				  url: "/coding/add_valence",
+				  data: {text_id: text_id, valence: valence},
+				})
+		}
+
+		function removeValence(text_id, valence){
+			$.ajax({
+				  type: "POST", 
+				  url: "/coding/remove_valence",
+				  data: {text_id: text_id, valence: valence},
+				})	
+		}
+
+		// Select Valence by clicking
+		$('.valence').on('click', function() {
+
+			text_id = $(this).parent().parent().attr("text_id")
+
+		 	if($(this).parent().children(".valence-active").length == 0){
+
+		 		$(this).addClass("valence-" + $(this).attr("valence") + "-selected")
+		 		$(this).addClass("valence-active")
+		 		addValence(text_id, $(this).attr("valence"))
+
+		 	}else{
+
+		 		selected = $(this).parent().children(".valence-active")
+		 		selected.removeClass("valence-active")
+		 		selected.removeClass("valence-" + selected.attr("valence") + "-selected")
+		 		removeValence(text_id, selected.attr("valence"))
+
+		 		if(selected.attr("valence") !== $(this).attr("valence")){
+			 		$(this).addClass("valence-" + $(this).attr("valence") + "-selected")
+			 		$(this).addClass("valence-active")
+			 		addValence(text_id, $(this).attr("valence"))
+			 	}
+		 	}
+		});
+
+
+
 	});
 </script>

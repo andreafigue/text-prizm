@@ -14,6 +14,7 @@
 
  @import "bootstrap";
 @import "feathericon";
+@import "jquery-ui";
 
 span.twitter-typeahead{
   width: 100%
@@ -27,6 +28,21 @@ span.twitter-typeahead{
 	color: #999;
 }
 
+.valence-positive-hover, .valence-positive-selected{
+	color: limegreen;
+}
+
+.valence-neutral-hover, .valence-neutral-selected{
+	color: gold;
+}
+
+.valence-negative-hover, .valence-negative-selected{
+	color: red;
+}
+
+.valence-unknown-hover, .valence-unknown-selected{
+	color: blue;
+}
 
 body{
 	padding-top: 47px;

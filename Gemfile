@@ -32,6 +32,8 @@ gem 'jquery-rails'
 gem 'feathericon-rails'
 gem 'devise'
 
+gem 'jquery-ui-rails'
+
 
 #gem 'bootstrap-typeahead-rails'
 
