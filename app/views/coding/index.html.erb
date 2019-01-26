@@ -146,12 +146,34 @@
 			</div>
 			<div class="tab-pane fade" id="valence" role="tabpanel" aria-labelledby="valence-tab">
 				<br>
-				<h1><center>
-					<i class='fe fe-smile valence-positive ' data-toggle="tooltip" title="Positive"></i>&nbsp;&nbsp;
-					<i class='fe fe-open-mouth valence-neutral' data-toggle="tooltip" title="Neutral"></i>&nbsp;&nbsp;
-					<i class='fe fe-angry valence-negative' data-toggle="tooltip" title="Negative"></i>&nbsp;&nbsp;
-					<i class='fe fe-question valence-unknown' data-toggle="tooltip" title="Unknown"></i>
-				</h1></center>
+				<center>
+					<h1>
+						<i class='fe fe-disabled valence-none' valence = "none" data-toggle="tooltip" title="None"></i>&nbsp;&nbsp;
+						<i class='fe fe-smile valence-positive ' valence = "positive" data-toggle="tooltip" title="Positive"></i>&nbsp;&nbsp;
+						<i class='fe fe-open-mouth valence-neutral' valence = "neutral" data-toggle="tooltip" title="Neutral"></i>&nbsp;&nbsp;
+						<i class='fe fe-angry valence-negative' valence = "negative" data-toggle="tooltip" title="Negative"></i>&nbsp;&nbsp;
+						<i class='fe fe-question valence-unknown' valence = "unknown" data-toggle="tooltip" title="Unknown"></i>
+					</h1>
+					<br>
+					<div class="row">
+						<div class="col-md-2" >
+						</div>
+						<div class="col-md-2 " >
+							<h3 ><i class=' fe fe-drop-left'  data-toggle="tooltip" ></i></h3>	
+						</div>
+						<div class="col-md-4 " >
+							<h3>	
+								<span></span>
+							</h3>
+							
+						</div>
+						<div class="col-md-2"  >
+							<h3 ><i class='fe fe-drop-right' data-toggle="tooltip" ></i></h3>
+						</div>
+						<div class="col-md-2" >
+						</div>
+					</div>						
+				</center>
 				<br>
 			</div>
 	    </div>
@@ -178,15 +200,27 @@
 		// Select a message from the list by clicking
 		$('#tableMessages').on('click', '.clickable-row', function(event) {
 			if (!$(this).hasClass('table-primary')) {
+				current_valence = $("#valence .valence-selected")
+				if(current_valence.length != 0){
+	    			current_valence.removeClass("valence-selected valence-"+current_valence.attr("valence")+"-selected")
+	    		}
 				$(this).addClass('table-primary').siblings().removeClass('table-primary');
 				$(this).siblings().attr("id", null)
 				$(this).attr("id", "row_active");
+
+				current_valence = $("#row_active .valence-active").attr("valence")
+				if(current_valence){
+	    			$("#valence .valence-"+current_valence).addClass("valence-selected valence-"+current_valence+"-selected")
+	    		}
+	    		
 			}
 		});
 
 		// Select first message on page load, PENDING: select where the user left
 		$("#tableMessages tr.clickable-row:first").click();
-
+		
+		
+		
 		// Navigation through message list using key up and down, PENDING: Add IJKL or WASD
 		$('html').keydown(function(e){
 			if ($("#codingModal").hasClass("show") == false){
@@ -196,7 +230,10 @@
 						a = $("#row_active")
 
 						if (a[0] != $("#tableMessages tr:last")[0]) {
-
+							current_valence = $("#valence .valence-selected")
+							if(current_valence.length != 0){
+				    			current_valence.removeClass("valence-selected valence-"+current_valence.attr("valence")+"-selected")
+				    		}
 							a.removeClass('table-primary');
 							a.attr("id", null);
 
@@ -204,6 +241,11 @@
 							b.addClass('table-primary');
 							b.attr("id", "row_active");
 							b[0].scrollIntoView(false);
+							current_valence = b.find(".valence-active").attr("valence")
+							if(current_valence){
+				    			$("#valence .valence-"+current_valence).addClass("valence-selected valence-"+current_valence+"-selected")
+				    		}
+				    		
 						}
 						//
 
@@ -213,6 +255,10 @@
 						a = $("#row_active")
 
 						if (a[0] != $("#tableMessages tr")[1]) {
+							current_valence = $("#valence .valence-selected")
+							if(current_valence.length != 0){
+				    			current_valence.removeClass("valence-selected valence-"+current_valence.attr("valence")+"-selected")
+				    		}
 							a.removeClass('table-primary');
 							a.attr("id", null);
 
@@ -220,6 +266,11 @@
 							b.addClass('table-primary');
 							b.attr("id", "row_active");
 							b[0].scrollIntoView(false);
+							current_valence = b.find(".valence-active").attr("valence")
+							if(current_valence){
+				    			$("#valence .valence-"+current_valence).addClass("valence-selected valence-"+current_valence+"-selected")
+				    		}
+				    		
 						}
 						//b.scrollIntoView(false);
 						break;
@@ -233,6 +284,7 @@
 			}
 
 		});
+
 
 		// Open Coding Modal by pressing any key
 	    $('html').keypress(function(e){
@@ -255,11 +307,31 @@
 	    });
 
 	    // Focus input on Coding Modal
-	    $('#codingModal').on('shown.bs.modal', function () {
+	    $('#codingModal').on('shown.bs.modal show.bs.modal', function () {
 	    	if($("#myTab a.active").attr("id") == "affect-tab"){
 	    		$('#inputAffectLabel').trigger('focus')
 	    	}else if($("#myTab a.active").attr("id") == "topic-tab"){
 	    		$('#inputTopicLabel').trigger('focus')
+	    	}else if($("#myTab a.active").attr("id") == "valence-tab"){
+	    		if($("#row_active .valence-active").length ==0 ){
+	    			$("#valence .valence-none").addClass("valence-selected valence-none-selected")
+	    			$("#valence span").text("None")
+	    			$("#valence  .fe-drop-left").css("color", "#d7d7d7")
+	    			$("#valence .fe-drop-left").addClass("disable-left")
+					$("#valence .fe-drop-right").css("color","black")
+	    		}
+	    		else{
+	    			$("#valence span").text($("#row_active .valence-active").attr("data-original-title"))	
+	    			if($("#row_active .valence-active").attr("valence") =="unknown") {
+	    				$("#valence  .fe-drop-right").css("color", "#d7d7d7")
+	    				$("#valence .fe-drop-right").addClass("disable-right")
+	    			}
+	    			else{
+	    				$("#valence .fe-drop-right").css("color","black")	
+	    			}
+	    			$("#valence .fe-drop-left").css("color","black")
+	    		}
+	    		
 	    	}
 	    });
 
@@ -574,23 +646,81 @@
 		 		$(this).addClass("valence-" + $(this).attr("valence") + "-selected")
 		 		$(this).addClass("valence-active")
 		 		addValence(text_id, $(this).attr("valence"))
-
+		 		$("#valence .valence-"+$(this).attr("valence")).addClass("valence-selected valence-" +$(this).attr("valence") +"-selected" )
 		 	}else{
-
 		 		selected = $(this).parent().children(".valence-active")
-		 		selected.removeClass("valence-active")
-		 		selected.removeClass("valence-" + selected.attr("valence") + "-selected")
-		 		removeValence(text_id, selected.attr("valence"))
-
+	 			selected.removeClass("valence-active")
+	 			selected.removeClass("valence-" + selected.attr("valence") + "-selected")
 		 		if(selected.attr("valence") !== $(this).attr("valence")){
 			 		$(this).addClass("valence-" + $(this).attr("valence") + "-selected")
 			 		$(this).addClass("valence-active")
 			 		addValence(text_id, $(this).attr("valence"))
+			 		$("#valence .valence-"+$(this).attr("valence")).addClass("valence-selected valence-" +$(this).attr("valence") +"-selected" )
+			 	}
+			 	else{
+			 		
+		 			removeValence(text_id, selected.attr("valence"))
+		 			$("#valence .valence-"+selected.attr("valence")).removeClass("valence-selected valence-" +selected.attr("valence") +"-selected" )
 			 	}
 		 	}
 		});
 
+		//select valence with modal
+		$('html').keydown(function(e){
+			if($("#codingModal").hasClass("show") == true && $("#myTab a.active").attr("id") == "valence-tab"){
+				current_valence = $("#valence .valence-selected")
+				switch(e.keyCode){
+					case 37:
+						if (current_valence.prev("i").length != 0){
+							current_valence.removeClass("valence-selected valence-"+current_valence.attr("valence")+"-selected")
+							current_valence.prev("i").addClass("valence-selected valence-"+current_valence.prev("i").attr("valence")+"-selected")	
+							$("#valence span").text(current_valence.prev("i").attr("data-original-title"))	
+						}
+						if(current_valence.prev("i").prev("i").length ==0){
+								$("#valence .fe-drop-left").css("color","#d7d7d7")
+								$("#valence .fe-drop-left").addClass("disable-left")
+						}
+						if($("#valence  .disable-right").length !=0){
+							$("#valence .fe-drop-right").css("color","black")
+						}
 
+					break
+					case 39:
+						if (current_valence.next("i").length != 0){
+							current_valence.removeClass("valence-selected valence-"+current_valence.attr("valence")+"-selected")
+							current_valence.next("i").addClass("valence-selected valence-"+current_valence.next("i").attr("valence")+"-selected")	
+							$("#valence span").text(current_valence.next("i").attr("data-original-title"))
+							if(current_valence.next("i").next("i").length ==0){
+								$("#valence .fe-drop-right").css("color","#d7d7d7")
+								$("#valence .fe-drop-right").addClass("disable-right")
+							}
+							if($("#valence  .disable-left").length !=0){
+								$("#valence .fe-drop-left").css("color","black")
+							}
+						}
+					break
+				}
+			}
+		});
+
+
+		$('#codingModal').on('hidden.bs.modal hidde.bs.modal', function (e) {
+  			selected_valence = $("#valence .valence-selected")
+  			current_valence = $("#row_active .valence-active")
+  			if(selected_valence.attr("valence") == "none" && current_valence.length != 0){
+  				current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")  				
+  				removeValence($("#row_active").attr("text_id"), current_valence.attr("valence"))
+				
+  			}
+  			else if(selected_valence.attr("valence") != current_valence.attr("valence" )){
+				current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")
+				$("#row_active .valence-"+selected_valence.attr("valence")).addClass("valence-active valence-"+selected_valence.attr("valence") +"-selected")
+				addValence($("#row_active").attr("text_id"), selected_valence.attr("valence"))
+  			}
+			$("#valence .fe-drop-left").addClass("disable-left")
+			$("#valence .fe-drop-right").addClass("disable-right")
+	
+		})
 
 	});
 </script>
