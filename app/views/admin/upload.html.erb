@@ -1,0 +1,34 @@
+<br><br>
+<div class="container">
+	<h1><i class="fe fe-upload"></i> Upload batch</h1>
+	<br>
+
+	<%= form_tag({action: :upload}, :method => "post", :multipart => "true") do %>
+
+		<div class="form-group row">
+			<%= label_tag "Name", nil, class: "col-md-2 col-form-label"%>
+			<div class="col-md-7">
+				<%= text_field_tag :batch_name, nil ,{ class: "form-control form-control-md", required: true } %>
+			</div>	
+		</div>
+
+		<div class="form-group row">
+			<%= label_tag "File", nil, class: "col-md-2 col-form-label"%>
+	    <div class="col-md-7">
+	   		<%= file_field_tag "file", class: "file form-control-md", name: "file", id: "file", required: true, multiple: false, overflow: "scroll" %>
+	   	</div>
+	  </div>
+
+	  <br>
+
+	  <button type="submit" class="btn btn-info">Submit</button>
+
+	<% end %>
+
+
+<script type="text/javascript">
+	$("#file").fileinput({'showPreview':false, 'showUpload': false, 'uploadAsync':false, 'progressClass':"hide"});
+</script>
+
+
+</div>

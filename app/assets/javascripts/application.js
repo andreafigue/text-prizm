@@ -17,6 +17,7 @@
 //= require activestorage
 //= require turbolinks
 //= require popper
+//= require fileinput
 //= require bootstrap-sprockets
 //= require_tree .
 

@@ -2,10 +2,18 @@ class CodingController < ApplicationController
   before_action :authenticate_user!
 
   def index
-  	@texts = Text.all
+
+  	@texts = Text.where(batch_id: params[:batch_id])
   	@codes = Code.all
   	@topics = Topic.all
   	@codings = current_user.codings
+    codes_ordered = @codings.order("updated_at")
+
+    if codes_ordered.last().nil?
+      @last_coded = 0
+    else
+      @last_coded = codes_ordered.last().text_id  
+    end
   	@codings.cache_key
   end
 

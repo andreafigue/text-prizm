@@ -1,0 +1,36 @@
+<div class="container">
+	<br><br><br>
+	<div class="row">
+		<div class="col-md-3">
+			<a role="button" href="/welcome/batches" class="btn btn-outline-info btn-lg btn-block" style="padding-top: 30px; padding-bottom: 30px">
+				<h3>
+					<i class="fe fe-edit"></i><br>
+					<strong>Code</strong>
+				</h3>
+			</a>
+		</div>
+		<% if current_user.admin? %>
+		<div class="col-md-3">
+			<a href="/admin/upload" role="button" class="btn btn-outline-success btn-lg btn-block" style="padding-top: 30px; padding-bottom: 30px">
+				<h3>
+					<i class="fe fe-upload"></i><br>
+					<strong>Upload batch</strong>
+				</h3>
+			</a>
+		</div>
+		<div class="col-md-3">
+			<a href="/admin/list" role="button" class="btn btn-outline-warning btn-lg btn-block" style="padding-top: 30px; padding-bottom: 30px">
+				<h3>
+					<i class="fe fe-gear"></i><br>
+					<strong>Admin</strong>
+				</h3>
+			</a>
+		</div>
+		<% end %> 
+		<div class="col-md-3">
+			<%= link_to "<h3><i class='fe fe-logout'></i><br><strong>Log out</strong></h3>".html_safe, destroy_user_session_path, :method => :delete, class: "btn btn-outline-secondary btn-lg btn-block", style: "padding-top: 30px; padding-bottom: 30px" %>
+		</div>
+	</div>
+</div>
+
+

@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_07_060924) do
+ActiveRecord::Schema.define(version: 2019_01_28_151749) do
+
+  create_table "batches", force: :cascade do |t|
+    t.string "name"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_batches_on_user_id"
+  end
 
   create_table "codes", force: :cascade do |t|
     t.string "name"
@@ -43,6 +51,8 @@ ActiveRecord::Schema.define(version: 2019_01_07_060924) do
     t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "batch_id"
+    t.index ["batch_id"], name: "index_texts_on_batch_id"
   end
 
   create_table "topics", force: :cascade do |t|
