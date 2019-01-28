@@ -680,6 +680,17 @@
 						}
 					break
 					case 13:
+					selected_valence = $("#valence .valence-selected")
+		  			current_valence = $("#row_active .valence-active")
+		  			if(selected_valence.attr("valence") == "none" && current_valence.length != 0){
+		  				current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")  				
+		  				removeValence($("#row_active").attr("text_id"), current_valence.attr("valence"))
+		  			}
+		  			else if(selected_valence.attr("valence") != current_valence.attr("valence" )){
+						current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")
+						$("#row_active .valence-"+selected_valence.attr("valence")).addClass("valence-active valence-"+selected_valence.attr("valence") +"-selected")
+						addValence($("#row_active").attr("text_id"), selected_valence.attr("valence"))
+		  			}
 		            	$("#codingModal").modal("hide");
 		            break
 
@@ -689,17 +700,7 @@
 
 
 		$('#codingModal').on('hidden.bs.modal hidde.bs.modal', function (e) {
-  			selected_valence = $("#valence .valence-selected")
-  			current_valence = $("#row_active .valence-active")
-  			if(selected_valence.attr("valence") == "none" && current_valence.length != 0){
-  				current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")  				
-  				removeValence($("#row_active").attr("text_id"), current_valence.attr("valence"))
-  			}
-  			else if(selected_valence.attr("valence") != current_valence.attr("valence" )){
-				current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")
-				$("#row_active .valence-"+selected_valence.attr("valence")).addClass("valence-active valence-"+selected_valence.attr("valence") +"-selected")
-				addValence($("#row_active").attr("text_id"), selected_valence.attr("valence"))
-  			}
+  			
 			$("#valence .fe-drop-left").removeClass("disable-left")
 			$("#valence .fe-drop-right").removClass("disable-right")
 		})
