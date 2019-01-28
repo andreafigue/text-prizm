@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_28_151749) do
+ActiveRecord::Schema.define(version: 2019_01_28_184117) do
 
   create_table "batches", force: :cascade do |t|
     t.string "name"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2019_01_28_151749) do
   end
 
   create_table "texts", force: :cascade do |t|
-    t.bigint "text_id"
+    t.integer "text_id"
     t.text "text"
     t.datetime "date"
     t.string "username"
