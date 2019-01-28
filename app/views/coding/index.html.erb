@@ -46,7 +46,7 @@
 											<% end %>
 
 										</td>
-										<td>
+										<td align="center">
 											<% if !aux.nil? %>
 												<i class='fe fe-smile valence-positive valence <%= aux.valence == 1 ? "valence-active valence-positive-selected": nil%>' valence="positive" data-toggle="tooltip" title="Positive"></i>&nbsp;
 												<i class='fe fe-open-mouth valence-neutral valence <%= aux.valence == 2 ? "valence-active valence-neutral-selected": nil%>' valence="neutral" data-toggle="tooltip" title="Neutral"></i>&nbsp;
@@ -209,14 +209,14 @@
 		});
 
 		// Select first message on page load, PENDING: select where the user left
-		if(<%= @last_coded%> == 0){
+		//if(<%= @last_coded%> == 0){
 			$("#tableMessages tr.clickable-row:first").click();
-			console.log(<%= @last_coded %> )
-		}
-		else{
-			$("#tableMessages tr[text_id= <%= @last_coded %>]").click()
-			console.log("asd")
-		}
+		//	console.log(<%= @last_coded %> )
+		//}
+		//else{
+		//	$("#tableMessages tr[text_id= <%= @last_coded %>]").click()
+		//	console.log("asd")
+		//}
 		
 		
 		
