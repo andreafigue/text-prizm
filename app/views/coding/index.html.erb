@@ -333,9 +333,9 @@
 			  return element.name ===tag_name; 
 			}); 
 			
-			tag_obj = $("#row_active td:nth-child(2) #emotion-tag-"+tag.id)[0]
+			tag_obj = $("#row_active td:nth-child(2) #emotion-tag-"+tag.id)
 
-			if( tag_obj==null){
+			if( $('#row_active *[id^="emotion-tag-"]').length <2 && tag_obj.length == 0){
 				$("#row_active td:nth-child(2)").append("<span id= emotion-tag-" +tag.id+" class='badge badge-pill badge-info float-right mx-1' style='background-color:"+tag.color+"'>"+tag.name+"</span>")	
 				text_id = $("#row_active").attr("text_id")
 				
@@ -350,7 +350,7 @@
 			}
 
 
-			else{
+			else if(tag_obj.length == 1){
 				tag_obj.remove()
 				text_id = $("#row_active").attr("text_id")
 				
@@ -405,11 +405,11 @@
 		          	}
 
 		          	selected = selected[0]
-					selected_obj = $("#row_active td:nth-child(2) #emotion-tag-"+selected.id)[0]
+					selected_obj = $("#row_active td:nth-child(2) #emotion-tag-"+selected.id)
 
 					text_id = $("#row_active").attr("text_id")
 
-					if( selected_obj == null){
+					if( $('#row_active *[id^="emotion-tag-"]').length < 2 && selected_obj.length == 0){
 						$("#row_active td:nth-child(2)").append("<span id= 'emotion-tag-"+selected.id+"' class='badge badge-pill badge-info float-right mx-1' style='background-color:"+selected.color+"'>"+selected.name+"</span>")	
 						$.ajax({
 						  type: "POST", 
@@ -420,7 +420,8 @@
 						  //error: function(jqXHR, textStatus, errorThrown){...}
 						})
 					}
-					else{
+					else if (selected_obj.length == 1){
+						console.log("hola")
 						selected_obj.remove()
 
 						$.ajax({
@@ -448,9 +449,9 @@
 			topic_row = topic.find(function(element) { 
 			  return element.name === topic_name; 
 			}); 
-			topic_obj = $("#row_active td:nth-child(2) #topic-tag-"+topic_row.id)[0]
+			topic_obj = $("#row_active td:nth-child(2) #topic-tag-"+topic_row.id)
 			text_id = $("#row_active").attr("text_id")
-			if( topic_obj==null){
+			if($('#row_active *[id^="topic-tag-"]').length < 1 && topic_obj.length==0){
 				$("#row_active td:nth-child(2)").append("<span id= 'topic-tag-" +topic_row.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+topic_row.icon+"'></i></span>")
 				$.ajax({
 						  type: "POST", 
@@ -461,7 +462,7 @@
 						  //error: function(jqXHR, textStatus, errorThrown){...}
 						})
 			}
-			else{
+			else if ( topic_obj.length == 1){
 				topic_obj.remove()
 				$.ajax({
 						  type: "POST", 
@@ -519,9 +520,11 @@
 		          	}
 
 		          	selected = selected[0]
-		          	selected_obj = $("#row_active td:nth-child(2) #topic-tag-"+selected.id)[0]
+		          	selected_objects = $("#row_active td:nth-child(2) #topic-tag-"+selected.id)
+
 		          	text_id = $("#row_active").attr("text_id")
-					if( selected_obj == null){
+		          	//if( selected_obj.length == 0){
+					if( $('#row_active *[id^="topic-tag-"]').length <1  && selected_objects.length == 0){
 						$("#row_active td:nth-child(2)").append("<span id= 'topic-tag-" +selected.id+"' class='badge badge-light badge-info float-right mx-1'><i class='fe fe-"+selected.icon+"'></i></span>")
 						$.ajax({
 						  type: "POST", 
@@ -532,8 +535,8 @@
 						  //error: function(jqXHR, textStatus, errorThrown){...}
 						})
 					}
-					else{
-						selected_obj.remove()
+					else if (selected_objects.length == 1){
+						selected_objects.remove()
 						$.ajax({
 						  type: "POST", 
 						  url: "/coding/remove_topic",
@@ -543,6 +546,7 @@
 						  //error: function(jqXHR, textStatus, errorThrown){...}
 						})
 					}	
+					
 			
 		          	//console.log(selected.name)
 		          	
@@ -702,7 +706,7 @@
 		$('#codingModal').on('hidden.bs.modal hidde.bs.modal', function (e) {
   			
 			$("#valence .fe-drop-left").removeClass("disable-left")
-			$("#valence .fe-drop-right").removClass("disable-right")
+			$("#valence .fe-drop-right").removeClass("disable-right")
 		})
 
 	});
