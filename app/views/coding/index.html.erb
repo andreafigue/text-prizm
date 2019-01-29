@@ -236,6 +236,7 @@
 							b.addClass('table-primary');
 							b.attr("id", "row_active");
 							b[0].scrollIntoView(false);
+							$('.typeahead').typeahead('val', '');
 				    		
 						}
 						//
@@ -254,7 +255,8 @@
 							b.attr("id", "row_active");
 							b[0].scrollIntoView(false);
 							current_valence = b.find(".valence-active").attr("valence")
-				    		
+							$('.typeahead').typeahead('val', '');
+
 						}
 						//b.scrollIntoView(false);
 						break;
@@ -280,13 +282,29 @@
 		    }
 	    });
 
-	    $("#myTab").on('shown.bs.tab', function (e) { 
+	    $("#myTab").on('shown.bs.tab show.bs.tab', function (e) { 
 	    	if($("#myTab a.active").attr("id") == "affect-tab"){
 	    		$('#inputAffectLabel').trigger('focus')
 	    	}else if($("#myTab a.active").attr("id") == "topic-tab"){
 	    		$('#inputTopicLabel').trigger('focus')
 	    	}else if($("#myTab a.active").attr("id") == "valence-tab"){
-	    		//$('#inputValene').trigger('focus')	
+	    		if($("#row_active .valence-active").length ==0 ){
+	    			updateValenceModal("None")
+	    			$("#valence .fe-drop-left").css("color", "#d7d7d7")
+	    			$("#valence .fe-drop-left").addClass("disable-left")
+					$("#valence .fe-drop-right").css("color","black")
+	    		}
+	    		else{
+	    			updateValenceModal($("#row_active .valence-active").attr("data-original-title"))	
+	    			if($("#row_active .valence-active").next("i").length == 0) {
+	    				$("#valence .fe-drop-right").css("color", "#d7d7d7")
+	    				$("#valence .fe-drop-right").addClass("disable-right")
+	    			}
+	    			else{
+	    				$("#valence .fe-drop-right").css("color","black")	
+	    			}
+	    			$("#valence .fe-drop-left").css("color","black")
+	    		}
 	    	}
 	    });
 	    function updateValenceModal(valence){
@@ -318,7 +336,6 @@
 	    			}
 	    			$("#valence .fe-drop-left").css("color","black")
 	    		}
-	    		
 	    	}
 	    });
 
@@ -420,7 +437,6 @@
 						})
 					}
 					else if (selected_obj.length == 1){
-						console.log("hola")
 						selected_obj.remove()
 
 						$.ajax({
@@ -571,9 +587,7 @@
 	    		//console.log("1")
 	    		event.preventDefault();
 	    		event.stopPropagation();
-	    		if($("#myTab a.active").attr("id") == "topic-tab"){
-	    			console.log("nada")
-	    		}else{
+	    		if($("#myTab a.active").attr("id") !== "topic-tab"){
 	    			$('#topic-tab').tab("show");
 	    		}
 	    		$('#inputTopicLabel').focus()
@@ -581,9 +595,7 @@
 	    		event.preventDefault();
 	    		event.stopPropagation();
 	    		//console.log("2")
-	    		if($("#myTab a.active").attr("id") == "affect-tab"){
-	    			console.log("nada")
-	    		}else{
+	    		if($("#myTab a.active").attr("id") !== "affect-tab"){
 	    			$('#affect-tab').tab("show");
 	    		}
 	    		$('#inputAffectLabel').focus()
@@ -683,17 +695,20 @@
 						}
 					break
 					case 13:
-					selected_valence = $("#valence .valence-selected")
-		  			current_valence = $("#row_active .valence-active")
-		  			if(selected_valence.attr("valence") == "none" && current_valence.length != 0){
-		  				current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")  				
-		  				removeValence($("#row_active").attr("text_id"), current_valence.attr("valence"))
-		  			}
-		  			else if(selected_valence.attr("valence") != current_valence.attr("valence" )){
-						current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")
-						$("#row_active .valence-"+selected_valence.attr("valence")).addClass("valence-active valence-"+selected_valence.attr("valence") +"-selected")
-						addValence($("#row_active").attr("text_id"), selected_valence.attr("valence"))
-		  			}
+						selected_valence = $("#valence .valence-selected")
+			  			current_valence = $("#row_active .valence-active")
+			  			if(selected_valence.attr("valence") == "none" && current_valence.length != 0){
+			  				current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")  				
+			  				removeValence($("#row_active").attr("text_id"), current_valence.attr("valence"))
+			  			}
+			  			else if(selected_valence.attr("valence") != current_valence.attr("valence" )){
+							current_valence.removeClass("valence-active valence-"+ current_valence.attr("valence") +"-selected")
+							$("#row_active .valence-"+selected_valence.attr("valence")).addClass("valence-active valence-"+selected_valence.attr("valence") +"-selected")
+							addValence($("#row_active").attr("text_id"), selected_valence.attr("valence"))
+			  			}
+			            	$("#codingModal").modal("hide");
+		            break
+		            case 27:
 		            	$("#codingModal").modal("hide");
 		            break
 
@@ -702,7 +717,7 @@
 		});
 
 
-		$('#codingModal').on('hidden.bs.modal hidde.bs.modal', function (e) {
+		$('#codingModal').on('hidden.bs.modal hide.bs.modal', function (e) {
   			
 			$("#valence .fe-drop-left").removeClass("disable-left")
 			$("#valence .fe-drop-right").removeClass("disable-right")
