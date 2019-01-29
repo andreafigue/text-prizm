@@ -1,0 +1,12 @@
+<%- headers = ['Id', 'Text', 'Topic',"Valence", 'Affect 1', "Affect 2"] -%>
+<%=  headers %><br>
+<%- @data.each do |data| -%>
+<% aux = @codings.find_by(text_id: data.id)  %>
+<%= #[data.id, data.text.text, data.topic.nil? ? nil : data.topic.name, data.valence.nil? ? "None" : case data.valence when 0 then "Unknown" when 1 then "Positive" when 2 then "Neutral" when 3 then "Negative" end, data.code_1.nil? ? nil: data.code_1.name, data.code_2.nil? ? nil: data.code_2.name] 
+	if aux.nil?
+		[data.id, data.text, nil, nil, nil, nil]
+	else
+		[data.id, data.text, data.codings.first.topic.nil? ? nil : data.codings.first.topic.name, data.codings.first.valence.nil? ? "None" : case data.codings.first.valence when 0 then "Unknown" when 1 then "Positive" when 2 then "Neutral" when 3 then "Negative" end, data.codings.first.code_1.nil? ? nil: data.codings.first.code_1.name, data.codings.first.code_2.nil? ? nil: data.codings.first.code_2.name]
+	end
+	 -%><br>
+<%- end -%>
