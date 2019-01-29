@@ -1,10 +1,10 @@
 <%- headers = ['Id', 'Text', 'Topic',"Valence", 'Affect 1', "Affect 2"] -%>
-<%= CSV.generate_line( headers).html_safe.chomp %>
+<%= CSV.generate_line( headers).chomp.html_safe %>
 <%- @data.each do |data| -%>
 <% aux = @codings.find_by(text_id: data.id)  %>
 <%= if aux.nil?
-		CSV.generate_line([data.id, data.text, nil, nil, nil, nil]).html_safe.chomp
+		CSV.generate_line([data.id, data.text, nil, nil, nil, nil]).chomp.html_safe
 	else
-		CSV.generate_line([data.id, data.text, data.codings.first.topic.nil? ? nil : data.codings.first.topic.name, data.codings.first.valence.nil? ? "None" : case data.codings.first.valence when 0 then "Unknown" when 1 then "Positive" when 2 then "Neutral" when 3 then "Negative" end, data.codings.first.code_1.nil? ? nil: data.codings.first.code_1.name, data.codings.first.code_2.nil? ? nil: data.codings.first.code_2.name]).html_safe.chop
+		CSV.generate_line([data.id, data.text, data.codings.first.topic.nil? ? nil : data.codings.first.topic.name, data.codings.first.valence.nil? ? "None" : case data.codings.first.valence when 0 then "Unknown" when 1 then "Positive" when 2 then "Neutral" when 3 then "Negative" end, data.codings.first.code_1.nil? ? nil: data.codings.first.code_1.name, data.codings.first.code_2.nil? ? nil: data.codings.first.code_2.name]).chomp.html_safe
 	end %>
 <%- end -%>
