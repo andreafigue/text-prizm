@@ -128,8 +128,14 @@ class CodingController < ApplicationController
   	if coding.nil?
   		puts "Coding doesn't exists"
   	else
-  		if coding.code_1_id == code_id
-  			coding.code_1 = nil
+  		if coding.code_1_id == code_id 			
+        if coding.code_2.nil?
+          coding.code_1 = nil
+        else
+          coding.code_1 = coding.code_2
+          coding.code_2 = nil
+
+        end
   		elsif coding.code_2_id == code_id
   			coding.code_2 = nil
   		end

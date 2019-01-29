@@ -24,7 +24,9 @@
  							<i class="fe fe-edit"></i>
  						</a>
  					</td>
- 					<td align="center"><i class="fe fe-download"></i></td>
+ 					<td align="center">
+ 						<%= link_to '<i class="fe fe-download"></i>'.html_safe, to_csv_path(format: :csv, batch_id: b.id) %>
+ 					</td>
  					<% #if current_user.admin?%>
  						<!--<td align="center"><i class="fe fe-trash"></i></td>-->
  					<% #end %>

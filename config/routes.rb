@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   	get "welcome/index", 'welcome#index'
     get "welcome/batches", 'welcome#batches'
+    get "welcome/to_csv/:batch_id" => "welcome#to_csv", as: "to_csv"
+
     get "coding/index/:batch_id" => "coding#index"
 
   	post "coding/add_code", "coding#add_code"
