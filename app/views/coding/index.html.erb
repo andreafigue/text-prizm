@@ -1,14 +1,14 @@
 <div class="container-fluid d-flex h-100 flex-column">
 	<div class="row flex-fill d-flex h-100">
-		<div class="flex-fill d-flex col-md-9" >
-			<div class="row flex-fill">
+		<div class="flex-fill d-flex col-md-9 h-100" >
+			<div class="row flex-fill" style="height: 100%">
 				<!--<div class="col-md-1" style="background-color:#EBFEFF"> 
 					<br><br><br><br><br><br><br><br>
 					<p style="text-orientation:upright;writing-mode: vertical-lr;text-align: center;vertical-align: middle;"> 
 					                        	T  i  m  e  l  i  n  e
 					</p>
 				</div>-->
-				<div class="col-md-12" style="overflow-y:auto;padding-left: 0;padding-right: 0;" id="texts">
+				<div class="col-md-12" style="overflow-y:auto !important;padding-left: 0;padding-right: 0;min-height: 0; max-height: 100%" id="texts">
 					<!-- <br>Here will be the short texts to be coded with a timeline on the left<br> -->
 					<% if !@texts.empty? %>
 						<table class="table table-bordered table-hover" id="tableMessages">
@@ -73,7 +73,7 @@
 		<div class="col-md-3" >
 			<!-- <br>Here will be the labels to code the data <br> -->
 
-			<div class="row" style="min-height:30%;max-height: 30%;overflow-y: auto;padding-top: 0.5em; padding-bottom:0.5em; margin: 0;">
+			<div class="row" style="min-height:0%;max-height: 30%;overflow-y: auto;padding-top: 0.5em; padding-bottom:0.5em; margin: 0;">
 				<% if !@codes.empty? %>
 					<% @codes.each do |c| %>
 						
@@ -90,7 +90,7 @@
 				<% end %>
 			</div>
 
-			<div class="row" style="height: 70%;overflow-y: auto;">
+			<div class="row" style="min-height:0%;max-height: 70%;overflow-y: auto;">
 				<% if !@topics.empty? %>
 					<table id="topicTable" class="table table-bordered table-hover table-sm" style="margin-bottom: 0">
 						<% @topics.each do |t| %>
