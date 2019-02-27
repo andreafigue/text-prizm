@@ -70,14 +70,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3" >
+		<div class="col-md-3" style="margin:0;padding-bottom: 0">
 			<!-- <br>Here will be the labels to code the data <br> -->
 
-			<div class="row" style="min-height:0%;max-height: 30%;overflow-y: auto;padding-top: 0.5em; padding-bottom:0.5em; margin: 0;">
+			<div class="row" style="min-height:0%;max-height: 32%;overflow-y: auto;padding-top: 0.4em; padding-bottom:0.4em; margin: 0;">
 				<% if !@codes.empty? %>
 					<% @codes.each do |c| %>
 						
-						<div class="col-md-6" style="padding: 2px;">	
+						<div class="col-lg-6" style="padding: 1px;">	
 							<button  id="emotion-tag-<%=c.id%>" type="button" class="btn btn-default btn-block btn-sm emotion-button"" style="background-color:<%=c.color%>">
 								 <strong><%= c.name%></strong>		
 							</button>
@@ -90,7 +90,7 @@
 				<% end %>
 			</div>
 
-			<div class="row" style="min-height:0%;max-height: 70%;overflow-y: auto;">
+			<div class="row" style="min-height:0%;max-height: 70%;overflow-y: auto;padding-bottom:0 ">
 				<% if !@topics.empty? %>
 					<table id="topicTable" class="table table-bordered table-hover table-sm" style="margin-bottom: 0">
 						<% @topics.each do |t| %>
