@@ -5,6 +5,6 @@
 <%= if aux.nil?
 		CSV.generate_line([data.id, data.text, nil, nil, nil, nil]).chomp.html_safe
 	else
-		CSV.generate_line([data.id, data.text, data.codings.first.topic.nil? ? nil : data.codings.first.topic.name, data.codings.first.valence.nil? ? "None" : case data.codings.first.valence when 0 then "Unknown" when 1 then "Positive" when 2 then "Neutral" when 3 then "Negative" end, data.codings.first.code_1.nil? ? nil: data.codings.first.code_1.name, data.codings.first.code_2.nil? ? nil: data.codings.first.code_2.name]).chomp.html_safe
+		CSV.generate_line([data.id, data.text, aux.topic.nil? ? nil : aux.topic.name, aux.valence.nil? ? "None" : case aux.valence when 0 then "Unknown" when 1 then "Positive" when 2 then "Neutral" when 3 then "Negative" end, aux.code_1.nil? ? nil: aux.code_1.name, aux.code_2.nil? ? nil: aux.code_2.name]).chomp.html_safe
 	end %>
 <%- end -%>
